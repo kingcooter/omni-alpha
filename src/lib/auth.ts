@@ -1,30 +1,30 @@
-import { auth } from "@clerk/nextjs/server";
+/**
+ * Simple single-user auth for personal Life OS.
+ * No login required - it's just for you.
+ */
+
+const DEFAULT_USER_ID = "owner";
 
 /**
- * Get the current authenticated user's ID.
- * Throws an error if not authenticated.
+ * Get the current user's ID.
+ * For single-user mode, always returns the default user.
  */
 export async function getCurrentUserId(): Promise<string> {
-  const { userId } = await auth();
-  if (!userId) {
-    throw new Error("Unauthorized: No user logged in");
-  }
-  return userId;
+  return DEFAULT_USER_ID;
 }
 
 /**
- * Get the current user ID or null if not authenticated.
- * Use this for optional auth scenarios.
+ * Get the current user ID or null.
+ * For single-user mode, always returns the default user.
  */
 export async function getCurrentUserIdOrNull(): Promise<string | null> {
-  const { userId } = await auth();
-  return userId;
+  return DEFAULT_USER_ID;
 }
 
 /**
- * Check if a user is currently authenticated.
+ * Check if a user is authenticated.
+ * For single-user mode, always returns true.
  */
 export async function isAuthenticated(): Promise<boolean> {
-  const { userId } = await auth();
-  return userId !== null;
+  return true;
 }
