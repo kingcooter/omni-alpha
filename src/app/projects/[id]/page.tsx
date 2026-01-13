@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { Sidebar } from "@/components/layout/sidebar";
