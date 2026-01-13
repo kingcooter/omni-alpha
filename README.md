@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Omni
+
+A personal AI command center for capturing thoughts, organizing projects, and dispatching AI agents.
+
+## Features
+
+- **Instant Capture**: Auto-focused inbox with Cmd+Enter to save
+- **Thought Management**: Pin, archive, and delete thoughts
+- **Warm Modern Design**: Dark mode with warm blacks and gold accents
+- **Fast**: Built with Next.js 16 and React 19
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4 + shadcn/ui
+- **Database**: SQLite (local) / Turso (production)
+- **ORM**: Drizzle
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- npm or pnpm
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/omni.git
+cd omni
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Database Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Local Development**: Uses SQLite automatically, no setup needed.
 
-## Learn More
+**Production (Turso)**:
+1. Create account at [turso.tech](https://turso.tech)
+2. Create database: `turso db create omni`
+3. Get token: `turso db tokens create omni`
+4. Set environment variables:
+   ```
+   TURSO_DATABASE_URL=libsql://omni-[username].turso.io
+   TURSO_AUTH_TOKEN=[your-token]
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+## Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Start dev server
+npm run dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Build for production
+npm run build
 
-## Deploy on Vercel
+# Push database schema
+npx drizzle-kit push
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Keyboard Shortcuts
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Shortcut | Action |
+|----------|--------|
+| `Cmd+Enter` | Save thought |
+| `Cmd+K` | Open command palette (coming soon) |
+
+## Project Structure
+
+```
+src/
+├── app/              # Next.js pages
+├── components/       # React components
+│   ├── layout/       # Layout components
+│   ├── inbox/        # Inbox components
+│   ├── thoughts/     # Thought components
+│   └── ui/           # shadcn/ui components
+├── lib/              # Utilities and database
+└── actions/          # Server actions
+```
+
+## License
+
+MIT

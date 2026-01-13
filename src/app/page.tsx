@@ -1,83 +1,56 @@
+import { Suspense } from "react";
 import { Sidebar } from "@/components/layout/sidebar";
 import { Header } from "@/components/layout/header";
 import { InboxCard } from "@/components/inbox/inbox-card";
-import { ThoughtList } from "@/components/thoughts/thought-list";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Calendar, Mail, Newspaper } from "lucide-react";
-import { getRecentThoughts } from "@/actions/thoughts";
+import { ThoughtListAsync } from "@/components/thoughts/thought-list-async";
+import { ThoughtListSkeleton } from "@/components/thoughts/thought-skeleton";
+import { StatsWidgets } from "@/components/dashboard/stats-widgets";
+import { StatsWidgetsSkeleton } from "@/components/dashboard/stats-skeleton";
+import { FocusWidget } from "@/components/dashboard/focus-widget";
+import { FocusWidgetSkeleton } from "@/components/dashboard/focus-skeleton";
 
-export default async function Dashboard() {
-  const thoughts = await getRecentThoughts(20);
-
+export default function Dashboard() {
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <Sidebar />
 
       {/* Main Content */}
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col overflow-hidden">
         {/* Header */}
         <Header />
 
         {/* Dashboard Content */}
-        <main className="flex-1 overflow-auto p-6">
-          <div className="mx-auto max-w-4xl space-y-6">
-            {/* Inbox Card - Primary */}
-            <InboxCard />
+        <main className="flex-1 overflow-auto">
+          <div className="mx-auto max-w-4xl space-y-8 p-6 md:p-8">
+            {/* Inbox Card - Hero */}
+            <section className="fade-in">
+              <InboxCard />
+            </section>
 
-            {/* Dashboard Panes Grid */}
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {/* Today Widget */}
-              <Card className="bg-card">
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex items-center gap-2 text-sm font-medium">
-                    <Calendar className="h-4 w-4 text-primary" />
-                    Today
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-semibold">0 events</div>
-                  <p className="text-xs text-muted-foreground">
-                    No events scheduled
-                  </p>
-                </CardContent>
-              </Card>
+            {/* Two-column layout: Focus + Stats */}
+            <section className="grid gap-6 lg:grid-cols-5">
+              {/* Focus Widget - takes more space */}
+              <div className="lg:col-span-3 slide-up">
+                <Suspense fallback={<FocusWidgetSkeleton />}>
+                  <FocusWidget />
+                </Suspense>
+              </div>
 
-              {/* Email Digest Widget */}
-              <Card className="bg-card">
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex items-center gap-2 text-sm font-medium">
-                    <Mail className="h-4 w-4 text-primary" />
-                    Email Digest
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-semibold">--</div>
-                  <p className="text-xs text-muted-foreground">
-                    Not configured
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* News Widget */}
-              <Card className="bg-card">
-                <CardHeader className="pb-2">
-                  <CardTitle className="flex items-center gap-2 text-sm font-medium">
-                    <Newspaper className="h-4 w-4 text-primary" />
-                    News
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-2xl font-semibold">--</div>
-                  <p className="text-xs text-muted-foreground">
-                    Not configured
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+              {/* Stats - compact sidebar */}
+              <div className="lg:col-span-2 slide-up">
+                <Suspense fallback={<StatsWidgetsSkeleton />}>
+                  <StatsWidgets />
+                </Suspense>
+              </div>
+            </section>
 
             {/* Recent Thoughts */}
-            <ThoughtList thoughts={thoughts} />
+            <section>
+              <Suspense fallback={<ThoughtListSkeleton count={5} />}>
+                <ThoughtListAsync />
+              </Suspense>
+            </section>
           </div>
         </main>
       </div>
